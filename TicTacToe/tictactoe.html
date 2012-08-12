@@ -1,0 +1,510 @@
+<html>
+	<body>
+		<canvas id="canvasT" width="300" height="300" />
+			<script>
+			var canvasT = document.getElementById("canvasT");
+			var cont = canvasT.getContext("2d");
+			var centerX=canvasT.width/2;
+			var centerY=canvasT.height/2;
+			//false is your turn
+			var turn = false;
+			var i;
+			var checkTwoO=false;
+			var win=false;
+			var checkTwo=false;
+			var lose = false;
+			var squares = [[0,100,200],[0,100,200],[0,100,200]];
+			var turn1=true;
+			var tictactoeV= [centerX-50,centerX+50];
+			var tictactoeH= [centerY-50,centerY+50];
+			var checkIfPieceIsThere= [[0,0,0],[0,0,0],[0,0,0]];
+			var checkX=[[0,0,0],[0,0,0],[0,0,0]];
+			var checkO=[[0,0,0],[0,0,0],[0,0,0]];
+			var commandbox = document.getElementById("commandbox");
+			
+			
+	// get the command
+			drawGrid();
+			canvasT.addEventListener("mousedown",function(e){
+				var xVal=e.x;
+				var yVal=e.y;
+				while(xVal%100!=0)
+					xVal++;
+				while(yVal%100!=0)
+					yVal--;
+					
+				
+					if(checkIfPieceIsThere[xVal/100-1][yVal/100]==0){	
+						checkX[xVal/100-1][yVal/100]=1;
+						drawX(xVal/100,yVal);
+						check();
+						if(win===true)
+						{//close pop up}
+						}
+						turn=true;
+						}
+				if(turn===true){
+				checkIfPieceIsThere[xVal/100-1][yVal/100]=1;
+				compTurn();
+					}	
+				
+					
+			
+			}
+			);
+			function drawGrid(){
+				//verticle lines
+				for( i = 0; i<2; i++){
+					cont.beginPath();
+					cont.moveTo(tictactoeV[i],0);
+					cont.lineTo(tictactoeV[i],canvasT.height);
+					cont.closePath();
+					cont.stroke();
+					}
+				
+				
+				//horizontal lines
+				for(i = 0; i<2; i++){
+					cont.beginPath();
+					cont.moveTo(0,tictactoeH[i]);
+					cont.lineTo(canvasT.width, tictactoeH[i]);
+					cont.closePath();
+					cont.stroke();
+				}
+			}
+			
+			function drawX(row,squarePlacement){
+				//if(checkIfPieceIsThere[row-1][squarePlacement/100]===1)
+					//return;
+				var centerPointX=100*row-50;
+				var centerPointY=squarePlacement+50;
+				
+				cont.beginPath();
+				cont.moveTo(row*100-100,squarePlacement);
+				cont.lineTo(centerPointX+50,centerPointY+50);
+				cont.closePath();
+				cont.stroke();
+				
+				cont.beginPath();
+				cont.moveTo(row*100,squarePlacement);
+				cont.lineTo(centerPointX-50,centerPointY+50);
+				cont.closePath();
+				cont.stroke();
+			
+			}
+			
+			function drawO(row,squarePlacement){
+				
+				cont.beginPath();
+				cont.arc(row*100-50,squarePlacement+50,50,0,Math.PI*2);
+				cont.closePath();
+				cont.stroke();
+				checkIfPieceIsThere[row-1][squarePlacement/100]=1;
+			
+			}
+			
+			function compTurn(){
+				checkTwoComp();
+				if(checkTwoO===false){
+				for(var h = 0; h<3; h++){
+		
+					if(checkX[h][1]===1 && checkX[h][0]===1 && checkIfPieceIsThere[h][2]===0){
+						checkO[h][2]=1;
+						drawO(h+1,200);
+						check2();
+						checkTwo=true;
+						break;
+			
+				}
+					if(checkX[h][1]===1 && checkX[h][2]===1 &&checkIfPieceIsThere[h][0]===0){
+						checkO[h][0]=1;
+						drawO(h+1,0);
+						check2();
+						checkTwo=true;
+						break;
+				}
+				if(checkX[h][0]===1 && checkX[h][2]===1 &&checkIfPieceIsThere[h][1]===0){
+						checkO[h][1]=1;
+						drawO(h+1,100);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					if(checkX[0][0]===1 && checkX[2][2]===1 &&checkIfPieceIsThere[1][1]===0){
+						checkO[1][1]=1;
+						drawO(2,100);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					if(checkX[2][0]===1 && checkX[0][2]===1 &&checkIfPieceIsThere[1][1]===0){
+						checkO[1][1]=1;
+						drawO(2,100);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					if(checkX[0][0]===1 && checkX[2][2]===1 &&checkIfPieceIsThere[1][1]===0){
+						checkO[1][1]=1;
+						drawO(2,100);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					if(checkX[2][0]===1 && checkX[0][2]===1 &&checkIfPieceIsThere[1][1]===0){
+						checkO[1][1]=1;
+						drawO(2,100);
+						check2();
+						checkTwo=true;
+						break;
+					
+					}
+					if(checkX[1][1]===1 && checkX[0][0]===1 && checkIfPieceIsThere[2][2]===0){
+						checkO[2][2]=1;
+						drawO(3,200);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					if(checkX[1][1]===1 && checkX[2][2]===1 && checkIfPieceIsThere[0][0]===0){
+						checkO[0][0]=1;
+						drawO(1,0);
+						check2();
+						checkTwo=true;
+						break;
+					}
+			}
+			}
+		
+			if(checkTwo===false){
+				for(var x = 0; x<3; x++){
+			
+					if(checkX[1][x]===1 && checkX[0][x]===1 && checkIfPieceIsThere[2][x]===0){
+						checkO[2][x]=1;
+						drawO(3,x*100);
+						check2();
+						checkTwo=true;
+						break;
+			
+			}
+					if(checkX[1][x]===1 && checkX[2][x]===1 &&checkIfPieceIsThere[0][x]===0){
+						checkO[0][x]=1;
+						drawO(1,x*100);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					if(checkX[0][x]===1 && checkX[2][x]===1 &&checkIfPieceIsThere[1][x]===0){
+						checkO[1][x]=1;
+						drawO(2,x*100);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					if(checkX[1][1]===1 && checkX[0][2]===1 && checkIfPieceIsThere[2][0]===0){
+						checkO[2][0]=1;
+						drawO(3,0);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					if(checkX[1][1]===1 && checkX[2][0]===1 && checkIfPieceIsThere[0][2]===0){
+						checkO[0][2]=1;
+						drawO(1,200);
+						check2();
+						checkTwo=true;
+						break;
+					}
+					
+			}
+	}
+				if(checkTwo===false){
+				while(turn===true){
+					var aRow=Math.floor( Math.random()*3);
+					if(aRow===3)
+						aRow=2;
+					
+					var aColumn=Math.floor(Math.random()*3);
+					if(aColumn===3)	
+						aColumn=2;
+					
+					if(checkIfPieceIsThere[aRow][aColumn]===0){
+						console.log(aRow);
+						console.log(aColumn);
+						checkO[aRow][aColumn]=1;
+						drawO(aRow+1,aColumn*100);
+						check2();
+						if(lose===true)
+						{//close pop up}
+						}
+						turn=false;
+					
+					}
+				}
+				}
+				checkTwoO=false;
+			    checkTwo=false;
+			    turn=false;
+			}
+			
+			function check()
+{
+  if(checkX[0][0]===1 && checkX[0][1]===1 && checkX[0][2] === 1)
+  {
+    alert("You Win!");
+    win=true;
+	turn=false;
+  } 
+  else if(checkX[1][0]===1 && checkX[1][1]===1 && checkX[1][2] === 1)
+  {
+    alert("You Win!");
+    win=true;
+	turn=false;
+  } 
+  else if(checkX[2][0]===1 && checkX[2][1]===1 && checkX[2][2] === 1)
+  {
+    alert("You Win!");
+    win=true;
+	turn=false;
+  }
+  else if(checkX[0][0]===1 && checkX[1][0]===1 && checkX[2][0] === 1)
+  {
+    alert("You Win!");
+    win=true;
+	turn=false;
+  }
+  else if(checkX[0][1]===1 && checkX[1][1]===1 && checkX[2][1] === 1)
+  {
+    alert("You Win!");
+    win=true;
+	turn=false;
+  }
+  else if(checkX[0][2]===1 && checkX[1][2]===1 && checkX[2][2] === 1)
+  {
+    alert("You Win!");
+    win=true;
+	turn=false;
+  }
+  else if(checkX[0][0]===1 && checkX[1][1]===1 && checkX[2][2] === 1)
+  {
+    alert("You Win!");
+    win=true;
+	turn=false;
+  }
+  else if(checkX[2][0]===1 && checkX[1][1]===1 && checkX[0][2] === 1)
+  {
+    alert("You Win!");
+    win=true;
+	turn=false;
+  }
+ 
+  else
+  {
+    
+    check2();
+     
+  } 
+}
+
+function check2()
+{
+   if(checkO[0][0]===1 && checkO[0][1]===1 && checkO[0][2] === 1)
+  {
+    alert("You Lose!");
+    lose=true;
+	turn=false;
+  } 
+  else if(checkO[1][0]===1 && checkO[1][1]===1 && checkO[1][2] === 1)
+  {
+    alert("You Lose");
+   lose=true;
+   turn=false;
+  } 
+  else if(checkO[2][0]===1 && checkO[2][1]===1 && checkO[2][2] === 1)
+  {
+    alert("You Lose");
+    lose=true;
+	turn=false;
+  }
+  else if(checkO[0][0]===1 && checkO[1][0]===1 && checkO[2][0] === 1)
+  {
+    alert("You Lose");
+    lose=true;
+	turn=false;
+  }
+  else if(checkO[0][1]===1 && checkO[1][1]===1 && checkO[2][1] === 1)
+  {
+    alert("You Lose");
+    lose=true;
+	turn=false;
+  }
+  else if(checkO[0][2]===1 && checkO[1][2]===1 && checkO[2][2] === 1)
+  {
+    alert("You Lose");
+    lose=true;
+	turn=false;
+  }
+  else if(checkO[0][0]===1 && checkO[1][1]===1 && checkO[2][2] === 1)
+  {
+    alert("You Lose");
+    lose=true;
+	turn=false;
+  }
+  else if(checkO[2][0]===1 && checkO[1][1]===1 && checkO[0][2] === 1)
+  {
+    alert("You Lose");
+    lose=true;
+	turn=false;
+  }
+ 
+}
+//checks for double O's on the screen
+function checkTwoComp(){
+//vertical
+	for(var h = 0; h<3; h++){
+		
+					if(checkO[h][1]===1 && checkO[h][0]===1 && checkIfPieceIsThere[h][2]===0){
+						checkO[h][2]=1;
+						drawO(h+1,200);
+						check2();
+						checkTwoO=true;
+						break;
+			
+				}
+					if(checkO[h][1]===1 && checkO[h][2]===1 &&checkIfPieceIsThere[h][0]===0){
+						checkO[h][0]=1;
+						drawO(h+1,0);
+						check2();
+						checkTwoO=true;
+						break;
+					}	
+					if(checkO[h][0]===1 && checkO[h][2]===1 &&checkIfPieceIsThere[h][1]===0){
+						checkO[h][1]=1;
+						drawO(h+1,100);
+						check2();
+						checkTwoO=true;
+						break;
+					}
+					if(checkO[0][0]===1 && checkO[2][2]===1 &&checkIfPieceIsThere[1][1]===0){
+						checkO[1][1]=1;
+						drawO(2,100);
+						check2();
+						checkTwoO=true;
+						break;
+					}
+					if(checkO[2][0]===1 && checkO[0][2]===1 &&checkIfPieceIsThere[1][1]===0){
+						checkO[1][1]=1;
+						drawO(2,100);
+						check2();
+						checkTwoO=true;
+						break;
+					
+					}
+					if(checkO[1][1]===1 && checkO[0][0]===1 && checkIfPieceIsThere[2][2]===0){
+						checkO[2][2]=1;
+						drawO(3,200);
+						check2();
+						checkTwoO=true;
+						break;
+					}
+					if(checkO[1][1]===1 && checkO[2][2]===1 && checkIfPieceIsThere[0][0]===0){
+						checkO[0][0]=1;
+						drawO(1,0);
+						check2();
+						checkTwoO=true;
+						break;
+					}
+			}
+			
+		//horizontal
+			if(checkTwoO===false){
+				for(var x = 0; x<3; x++){
+			
+					if(checkO[1][x]===1 && checkO[0][x]===1 && checkIfPieceIsThere[2][x]===0){
+						checkO[2][x]=1;
+						drawO(3,x*100);
+						check2();
+						checkTwoO=true;
+						break;
+			
+			}
+					if(checkO[1][x]===1 && checkO[2][x]===1 &&checkIfPieceIsThere[0][x]===0){
+						checkO[0][x]=1;
+						drawO(1,x*100);
+						check2();
+						checkTwoO=true;
+						break;
+					}
+					if(checkO[0][x]===1 && checkO[2][x]===1 &&checkIfPieceIsThere[1][x]===0){
+						checkO[1][x]=1;
+						drawO(2,x*100);
+						check2();
+						checkTwoO=true;
+						break;
+					}
+					if(checkO[1][1]===1 && checkO[0][2]===1 && checkIfPieceIsThere[2][0]===0){
+						checkO[2][0]=1;
+						drawO(3,0);
+						check2();
+						checkTwoO=true;
+						break;
+					}
+					if(checkO[1][1]===1 && checkO[2][0]===1 && checkIfPieceIsThere[0][2]===0){
+						checkO[0][2]=1;
+						drawO(1,200);
+						check2();
+						checkTwoO=true;
+						break;
+					}
+					
+					
+			}
+	}
+}
+/*
+
+	
+		
+	for(var h = 0; h<3; h++){
+		
+		if(checkX[h][1]===1 && checkX[h][0]===1 && checkIfPieceIsThere[h][2]===0){
+			drawO(h+1,200);
+			checkTwo=true;
+			break;
+		
+		}
+		if(checkX[h][1]===1 && checkX[h][2]===1 &&checkIfPieceIsThere[h][0]===0){
+			drawO(h+1,0);
+			checkTwo=true;
+			break;
+			}
+		}
+	
+	if(checkTwo===false){
+	for(var x = 0; x<3; x++){
+		
+		if(checkX[1][x]===1 && checkX[0][x]===1 && checkIfPieceIsThere[2][x]===0){
+			drawO(3,x*100);
+			checkTwo=true;
+			break;
+		
+		}
+		if(checkX[1][x]===1 && checkX[2][x]===1 &&checkIfPieceIsThere[0][x]===0){
+			drawO(1,x*100);
+			checkTwo=true;
+			break;
+			}
+		}
+}
+
+*/
+/*Checking with spaces
+for(var v = 0; v
+
+
+*/
+			
+		</script>
+		</body>
+		</html>
+			

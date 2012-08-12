@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<!-- Code written by Abraham Adberstein, Luiji, Dennis Cherchenko and Stefan Grosser -->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  <title>Artificial Intelligence</title>
+  <link rel="shortcut icon" href="/favicon.ico" > 
+  <!-- Note: make sure to use the exact case: some of us (particularly me and Luiji) use case-sensitive operating systems. -->
+  <script src="jquery.js"></script>
+  <script src="jQueryUI/jquery.ui.core.min.js"></script>
+  <script src="jQueryUI/jquery.ui.widget.min.js"></script>
+  <script src="jQueryUI/jquery.ui.mouse.min.js"></script>
+  <script src="jQueryUI/jquery.ui.draggable.min.js"></script>
+  <script src="main.js"></script>
+  <script src="Speach/speakGenerator.js"></script>
+  <script src="Speach/speakClient.js"></script>
+  <script src="Dictionary/commands.js"></script>
+  <script src="Backgrounds/Starfield.js"></script>
+  <script src="Expressions/mood.js"></script>
+  <script src="Expressions/face.js"></script>
+  <script src= "TicTacToe/tictactoe.js"></script>
+
+  <!-- Import stylesheet -->
+  <link rel="stylesheet" href="main.css" type="text/css" media="all" />
+</head>
+<body onload="init_main()">
+  <div id="header">
+    <h1>George</h1>
+  </div>
+
+  <div><canvas id="canvas" width="1000" height="400"></canvas></div>
+
+  <div id="input-zone">
+    <p class="label">
+      What's on your mind?
+    </p>
+
+    <p>
+      <textarea id="chatlog" readonly></textarea>
+    </p>
+
+    <p>
+      <input type="text" x-webkit-speech lang="English" id="commandbox" onkeydown="handle_keypress(event)" onwebkitspeechchange="speech(event)"/>
+      <input type="button" value="Enter" onclick="handle_command()" />
+    </p>
+  </div>
+
+  <div id="tictactoe-zone" >
+    <canvas id="canvasT" width="300" height="300"></canvas>
+  </div>
+
+  <div id="audio"></div>
+</body>
+</html>
